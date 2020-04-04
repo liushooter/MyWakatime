@@ -3,6 +3,7 @@ const dateFormat = require('dateformat');
 const WakaTimeClient = require('wakatime-client').WakaTimeClient;
 const SteinStore = require("stein-js-client");
 
+const steinhqApi = ""
 const wakaTimeApiKey = ""
 const uid = ""
 const repo = ""
@@ -90,8 +91,10 @@ async function getMySummary() {
 
 
 async function getMyTodayWorkTime() {
-  const _now = new Date();
+  const _now = new Date()
+
   const now = dateFormat(_now, "yyyy-mm-dd")
+  const fulldatatime = dateFormat(_now, "yyyy-mm-dd HH:MM:ss")
 
   const summary = await getMySummary()
 
@@ -107,9 +110,20 @@ async function getMyTodayWorkTime() {
   const xsec = Math.floor(total_seconds % 60)
   const xmin = Math.floor((total_seconds - xhour * 3600 - xsec) / 60)
 
-  console.log(`${now} 工作时间：${xhour}小时 ${xmin}分钟 ${xsec + 1}秒，共计${total_seconds} 秒`)
+  const info = `${now} 工作时间：${xhour}小时 ${xmin}分钟 ${xsec + 1}秒`
+
+  console.log(`${info}，共计${total_seconds} 秒`)
+
+  const store = new SteinStore(steinhqApi);
+  store.append("work", [{
+      worktime: fulldatatime,
+      durations: info,
+      total_seconds: total_seconds,
+    }, ])
+    .then(res => {
+      console.log(res);
+    });
 
 }
-
 
 getMyTodayWorkTime()
