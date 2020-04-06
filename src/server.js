@@ -110,9 +110,9 @@ async function getMyTodayWorkTime() {
   const xsec = Math.floor(total_seconds % 60)
   const xmin = Math.floor((total_seconds - xhour * 3600 - xsec) / 60)
 
-  const info = `${now} 工作时间：${xhour}小时 ${xmin}分钟 ${xsec + 1}秒`
+  const info = `工作时间：${xhour}小时 ${xmin}分钟 ${xsec + 1}秒`
 
-  console.log(`${info}，共计${total_seconds} 秒`)
+  console.log(`${now} ${info}，共计${total_seconds} 秒`)
 
   const store = new SteinStore(steinhqApi);
   store.append("work", [{
